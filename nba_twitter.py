@@ -14,7 +14,8 @@ TODO:
 - Set it to only look every 5 minutes when a game has started, every hour otherwise
 - Get the code to check if it has mentioned every game to prevent a nap before sleeping
   - Verify that it currently does both of these things
-- Get the code to set up the tracking file every time it begins running to minimize micromanagement after a crash
+  - The code currently naps for an hour after the last game is over, but before it has a box score put out. This could potentially roll it over after midnight, grabbing the wrong number of games
+- Divide the code into classes
 '''
 
 NBATeams = teams.get_teams()
@@ -83,6 +84,9 @@ def check_game(game_index, games_list):
 		games_list = list(map(lambda game: game.replace('\n', ''), games_list))
 		if '0' not in games_list:
 			reset_games(1, True)
+			return True
+		else:
+			return False
 
 def check_tracker():
 	games_list = []
@@ -106,17 +110,16 @@ def check_start():
 		gamesFinished = [finished[0] for finished in gamesStarted if finished[1] == 'Final']
 		#If a game has finished run the rest of the script
 		if len(gamesFinished) > 0:
-			check_tracker()
-			#If there are games that haven't finished, continue waiting to check them
+			return check_tracker()
+			'''#If there are games that haven't finished, continue waiting to check them
 			if len(gamesFinished) != len(todaysGames):
-				print('Snoozing ...')
-				time.sleep(300)
-				check_start()
+				return True
+			#If all the games have finished, break the loop and go to sleep
+			else:
+				return False'''
 		#If a game hasn't finished, snooze until it's over
 		else:
-			print('Snoozing ...')
-			time.sleep(300)
-			check_start()
+			return False
 
 def write_games(index, games_list):
 	#Open the tracking file
@@ -297,7 +300,10 @@ def get_headshot(team_id, player_id):
 reset_games(dayOffset, False)
 
 while True:
-	check_start()
+	#Check if a game has started but hasn't finished
+	while check_start():
+		print('Snoozing ...')
+		time.sleep(300)
 	#Repeat the process every 5 minutes
 	print('Napping ...')
 	time.sleep(6000)
