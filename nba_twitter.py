@@ -16,6 +16,7 @@ TODO:
   - Verify that it currently does both of these things
   - The code currently naps for an hour after the last game is over, but before it has a box score put out. This could potentially roll it over after midnight, grabbing the wrong number of games
 - Divide the code into classes
+- Remove the tracking file by storing the games for today in a list generated from the number of games. I don't see the point anymore.
 '''
 
 NBATeams = teams.get_teams()
@@ -99,7 +100,7 @@ def check_tracker():
 		#Go through the data in the list and check games that haven't finished
 		for index, game in enumerate(games_list):
 			if int(game) == 0:
-				check_game(index, games_list)
+				return check_game(index, games_list)
 
 def check_start():
 	#Check the games for today
