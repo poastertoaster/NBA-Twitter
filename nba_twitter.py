@@ -11,7 +11,7 @@ TODO:
 - Move the code into smaller classes
 - Redo the gameStats variable to be more concise (remove the initial dict and make it a list, etc)
 '''
-dayOffset = -1
+dayOffset = 0
 
 tracker().reset_games(dayOffset, False)
 

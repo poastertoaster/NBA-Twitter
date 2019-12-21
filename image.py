@@ -71,9 +71,9 @@ class image():
 				createdImage = image().draw_row(gameStats, createdImage, offset, key.replace('Player_', ''))
 				offset += 75
 		#Draw the Arena name
-		arw, arh = drawing.textsize(f"{gameStats['home']['team_info'][3]}", font=record_font)
+		arw, arh = drawing.textsize(f"{gameStats['home']['team_info'][4]}", font=record_font)
 		drawing.rectangle([0, 345, 640, 360], fill='white')
-		drawing.text((320-(arw/2), 358-arh), gameStats['home']['team_info'][3], fill=self.colors[gameStats['home']['team_info'][0]], font=record_font)
+		drawing.text((320-(arw/2), 358-arh), gameStats['home']['team_info'][4], fill=self.colors[gameStats['home']['team_info'][0]], font=record_font)
 		#Save the image
 		createdImage.save('image.png')
 		

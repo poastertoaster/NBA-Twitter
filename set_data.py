@@ -18,10 +18,10 @@ class set_data():
 		for team in self.NBATeams:
 			if team['id'] == game.HOME_TEAM_ID:
 				ratio = [ratio['TEAM_WINS_LOSSES'] for index, ratio in game_line.iterrows() if ratio['TEAM_ID'] == team['id']]
-				gameStats['home']['team_info'] = [team['full_name'], team['id'], ratio[0]]
+				gameStats['home']['team_info'] = [team['full_name'], team['id'], ratio[0], team['abbreviation']]
 			elif team['id'] == game.VISITOR_TEAM_ID:
 				ratio = [ratio['TEAM_WINS_LOSSES'] for index, ratio in game_line.iterrows() if ratio['TEAM_ID'] == team['id']]
-				gameStats['away']['team_info'] = [team['full_name'], team['id'], ratio[0]]
+				gameStats['away']['team_info'] = [team['full_name'], team['id'], ratio[0], team['abbreviation']]
 		#Create a dictionary that will store the stat leaders for each team
 		for key in gameStats.keys():
 			gameStats[key]['boxscore'] = {

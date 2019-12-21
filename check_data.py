@@ -5,6 +5,7 @@ from nba_api.stats.endpoints import boxscoretraditionalv2
 from image import image
 from set_data import set_data
 from tracker import tracker
+from update_twitter import update_twitter
 
 class check_data():
 
@@ -31,10 +32,11 @@ class check_data():
 				image().create_image(gameStats)
 				#Print the tagline for the game.
 				if gameStats['home']['boxscore']['team_points'] > gameStats['away']['boxscore']['team_points']:
-					status = f"The {gameStats['home']['team_info'][0]} defeat the {gameStats['away']['team_info'][0]} {gameStats['home']['boxscore']['team_points']}-{gameStats['away']['boxscore']['team_points']} off of {gameStats['home']['boxscore']['Player_Points'][2]} points from {gameStats['home']['boxscore']['Player_Points'][0]}."
+					status = f"The {gameStats['home']['team_info'][0]} defeat the {gameStats['away']['team_info'][0]} {gameStats['home']['boxscore']['team_points']}-{gameStats['away']['boxscore']['team_points']} off of {gameStats['home']['boxscore']['Player_Points'][2]} points from {gameStats['home']['boxscore']['Player_Points'][0]}. #{gameStats['away']['team_info'][3]}at{gameStats['home']['team_info'][3]}"
 				else:
-					status = f"The {gameStats['away']['team_info'][0]} defeat the {gameStats['home']['team_info'][0]} {gameStats['away']['boxscore']['team_points']}-{gameStats['home']['boxscore']['team_points']} off of {gameStats['away']['boxscore']['Player_Points'][2]} points from {gameStats['away']['boxscore']['Player_Points'][0]}."
+					status = f"The {gameStats['away']['team_info'][0]} defeat the {gameStats['home']['team_info'][0]} {gameStats['away']['boxscore']['team_points']}-{gameStats['home']['boxscore']['team_points']} off of {gameStats['away']['boxscore']['Player_Points'][2]} points from {gameStats['away']['boxscore']['Player_Points'][0]}. #{gameStats['away']['team_info'][3]}at{gameStats['home']['team_info'][3]}"
 				print(status)
+				update_twitter().send_update(status)
 			#When the last game has been checked, set up for tomorrow
 			games_list = list(map(lambda game: game.replace('\n', ''), games_list))
 			if '0' not in games_list:
@@ -56,7 +58,10 @@ class check_data():
 			#Go through the data in the list and check games that haven't finished
 			for index, game in enumerate(games_list):
 				if int(game) == 0:
-					check_data().check_game(index, games_list, dayOffset)
+					try:
+						check_data().check_game(index, games_list, dayOffset)
+					except:
+						print('Messed up somewhere ...')
 
 	def check_start(self, dayOffset):
 		#Check the games for today
